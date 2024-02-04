@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Oculus Touch Controls with A-Frame</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
+</head>
+<body>
+  <a-scene oculus-touch-controls>
+    <!-- Camera rig -->
+    <a-entity id="cameraRig" position="0 0 0">
+      <!-- Oculus Touch controller models -->
+      <a-entity oculus-touch-controls="hand: left" controller-collider></a-entity>
+      <a-entity oculus-touch-controls="hand: right" controller-collider></a-entity>
+
+      <!-- Camera -->
+      <a-entity camera look-controls></a-entity>
+    </a-entity>
+
+    <!-- Ground plane -->
+    <a-plane position="0 -20 0" rotation="-90 0 0" width="100" height="100" color="#7BC8A4"></a-plane>
+    <a-box position="0 0 -10" width="10" height="10" color="#9DC8A4"> </a-box>
+  </a-scene>
+  
+  <!-- Scripts -->
+  <script>
+    AFRAME.registerComponent('controller-collider', {
+      init: function() {
+        const controller = this.el;
+
+        controller.addEventListener('thumbstickmoved', function(evt) {
+          const direction = evt.detail;
+          const speed = 0.05; // Adjust speed as needed
+
+          // Get the camera rig entity
+          const cameraRig = document.getElementById('cameraRig');
+          
+          // Move forward/backward based on thumbstick Y-axis
+          cameraRig.object3D.translateZ(-direction.y * speed);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
